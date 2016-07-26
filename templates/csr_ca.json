@@ -1,0 +1,16 @@
+{
+  "CN": "{{canonical_name}}",
+  "key": {
+    "algo": "{{algorithm}}",
+    "size": {{size}}
+  },
+    "names": [
+       {
+         "C": "{{country}}",
+         "L": "{{location}}",
+         "O": "{{organization}}",
+         "OU": "{{organization_unit}}",
+         "ST": "{{state}}"
+       }
+    ]
+}

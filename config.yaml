@@ -1,0 +1,33 @@
+options:
+  country:
+    type: string
+    default: US
+    description: Country for CSR Meta
+  location:
+    type: string
+    default: San Francisco
+    description: Location for CSR Meta
+  organization:
+    type: string
+    default: My Awesome Company
+    description: Organization for CSR Meta
+  organization_unit:
+    type: string
+    default: CA Services
+    description: Organization Unit (Dept.) for CSR Meta
+  state:
+    type: string
+    default: California
+    description: State/Country for CSR Meta
+  algorithm:
+    type: string
+    default: rsa
+    description: Encryption Algorithm for CSR Keys
+  size:
+    type: int
+    default: 2048
+    description: Key Size
+  canonical_name:
+    type: string
+    default: My Awesome CA
+    description: Canonical name for CSR Meta
