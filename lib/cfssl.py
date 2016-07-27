@@ -1,3 +1,4 @@
+from ca_utils import get_output
 
 
 def sign(csr, ca="ca.pem", ca_key="ca-key.pem", config=None, profile=None,
@@ -42,6 +43,12 @@ def selfsign(hostname, csrjson):
 def scan(host, list=False, family=None, scanner=None, timeout=0):
     """ Scan a host for issues.
 
+    * IPv4/IPv6 connectivity
+    * Certificate validity (expiration, trust chain, hostnames, etc.)
+    * Supported cipher suites and algorithms
+    * Session resumption
+    * Revoked certificates
+
     :param host: Host(s) to scan (including port)
     :param list: List possible scanners
     :param family: Scanner family regular expression
@@ -78,7 +85,7 @@ def serve(address="127.0.0.1",
           remote=None,
           config=None,
           uselocal=False):
-    """ Set up a HTTP server handles CF SSL requests.
+    """ Set up a HTTP server to handle CF SSL requests.
 
       :param address: Address to bind
       :param port: Port to bind
@@ -101,6 +108,58 @@ def serve(address="127.0.0.1",
     # [-metadata file] [-remote remote_host] [-config config] [-uselocal]
 
     pass
+
+
+def gencert(csrjson, initca=False, remote=None, ca=None, ca_key=None,
+            config=None, hostname=None, profile=None, label=None):
+    """ Generate a new key and signed certificate.
+
+    :param csrjson: JSON file containing the request
+    :param initca: Initialise new CA
+    :param remote: Remote CFSSL server
+    :param ca: CA used to sign the new certificate
+    :param ca_key: CA private key
+    :param config: Path to configuration file
+    :param hostname: Hostname for the cert, could be a comma-separated hostname
+        list
+    :param profile: Signing profile to use
+    :param label: Key label to use in remote CFSSL server
+
+    :returns: JSON string of the result, or non-json error messaging.
+    """
+    # Usage of gencert:
+    #     Generate a new key and cert from CSR:
+    #         cfssl gencert -initca CSRJSON
+    #         cfssl gencert -ca cert -ca-key key [-config config]
+    #            [-profile profile] [-hostname hostname] CSRJSON
+    #         cfssl gencert -remote remote_host [-config config]
+    #            [-profile profile] [-label label] [-hostname hostname] CSRJSON
+    #
+    #     Re-generate a CA cert with the CA key and CSR:
+    #         cfssl gencert -initca -ca-key key CSRJSON
+    #
+    #     Re-generate a CA cert with the CA key and certificate:
+    #         cfssl gencert -renewca -ca cert -ca-key key
+
+    cmd = ["cfssl", "gencert"]
+
+    if initca:
+        cmd.append("-initca")
+    if ca:
+        cmd.append("".join(["-ca=", ca]))
+    if ca_key:
+        cmd.append("".join(["-ca-key=", ca_key]))
+    if config:
+        cmd.append("".join(["-profile=", profile]))
+    if label:
+        cmd.append("".join(["-label=", label]))
+    if hostname:
+        cmd.append("".join(["-hostname=", hostname]))
+    if remote:
+        cmd.append("".join(["-remote=", remote]))
+
+    cmd.append(csrjson)
+    return get_output(" ".join(cmd))
 
 
 def genkey(csrjson, initca=False, config=None):
