@@ -1,0 +1,44 @@
+{
+  "auth_keys": {
+    "factoid": {
+      {# api_key is a 32 character 16 bit hex key #}
+      "key": "{{apikey}}",
+      "type": "standard"
+    }
+  },
+  "signing": {
+      "default": {
+          "expiry": "43800h"
+      },
+      "profiles": {
+          "server": {
+              "expiry": "43800h",
+              "auth_key": "factoid",
+              "usages": [
+                  "signing",
+                  "key encipherment",
+                  "server auth"
+              ]
+          },
+          "client": {
+              "expiry": "43800h",
+              "auth_key": "factoid",
+              "usages": [
+                  "signing",
+                  "key encipherment",
+                  "client auth"
+              ]
+          },
+          "client-server": {
+              "expiry": "43800h",
+              "auth_key": "factoid",
+              "usages": [
+                  "signing",
+                  "key encipherment",
+                  "server auth",
+                  "client auth"
+              ]
+          }
+      }
+  }
+}
