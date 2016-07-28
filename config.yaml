@@ -31,3 +31,7 @@ options:
     type: string
     default: My Awesome CA
     description: Canonical name for CSR Meta
+  default_policy:
+    type: string
+    default: "policy/default_5_year.json"
+    description: Default policy file to use when signing/hosting the CA
